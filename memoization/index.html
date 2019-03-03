@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+
+    let sum = function sum(...values) {
+        //default value
+        let result = 0;
+        // iterate arguments in loop
+        for (let i = 0; i < values.length; i++) {
+            //Check is iterate element a number
+            if (typeof values[i] === "number") {
+                result += values[i];
+            }
+        }
+        return result;
+    };
+
+    let multiply = function multiply(...values) {
+        //default value
+        let result = 1;
+        // iterate arguments in loop
+        for (let i = 0; i < values.length; i++) {
+            //Check is iterate element a number
+            if (typeof values[i] === "number") {
+                result *= values[i];
+            }
+        }
+        return result;
+    };
+
+    let memoization = function (fn) {
+        let cacheSum = {};
+        let cacheMultiply = {};
+        let fnName = fn.name;
+        return function (...args) {
+           if(fnName === 'sum' ){
+               let n = JSON.stringify(...args);
+               if (n in cacheSum) {
+                   console.log('Fetching from cache');
+                   return cacheSum[n];
+               }
+               else {
+                   console.log('Calculating result');
+                   let result = fn(...args);
+                   cacheSum[n] = result;
+                   return result;
+               }
+           } else if(fnName === 'multiply' ){
+               let n = JSON.stringify(...args);
+               if (n in cacheMultiply) {
+                   console.log('Fetching from cache');
+                   return cacheMultiply[n];
+               }
+               else {
+                   console.log('Calculating result');
+                   let result = fn(...args);
+                   cacheMultiply[n] = result;
+                   return result;
+               }
+           }
+        }
+    };
+
+    const mS = memoization(sum);
+    console.log(mS(4,2));
+    console.log(mS(5,3));
+    console.log(mS(4,2));
+
+    const mMylt = memoization(multiply);
+    console.log(mMylt(4,2));
+    console.log(mMylt(5,3));
+    console.log(mMylt(4,2))
+</script>
+</body>
+</html>
